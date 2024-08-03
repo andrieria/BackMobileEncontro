@@ -1,32 +1,30 @@
-// app.js
 const express = require('express');
+const { Sequelize } = require('sequelize');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware para analisar o corpo das requisições JSON
+// Configuração do Express
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Rota de exemplo
+// Conectar ao banco de dados
+const sequelize = new Sequelize({
+  dialect: 'mysql',
+  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+
+sequelize.authenticate()
+  .then(() => console.log('Conectado ao banco de dados.'))
+  .catch(err => console.error('Não foi possível conectar ao banco de dados:', err));
+
+// Rota de teste
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 
-// Middleware para tratar erros 404 (rota não encontrada)
-app.use((req, res, next) => {
-  res.status(404).send({ message: 'Rota não encontrada' });
-});
-
-// Middleware para tratamento de erros
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send({ message: 'Ocorreu um erro no servidor!' });
-});
-
-// Iniciar o servidor
-app.listen(PORT, (err) => {
-  if (err) {
-    console.error('Erro ao iniciar o servidor:', err);
-    process.exit(1);
-  }
+app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
