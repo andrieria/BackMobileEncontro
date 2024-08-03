@@ -147,3 +147,6 @@ dist
 # .env
 
 # Uncomment this line if your project uses migrations, models, seede
+!src/migrations/
+!src/models/
+!src/seeders/
