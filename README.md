@@ -26,8 +26,12 @@
     DB_NAME=nome_do_banco
     PORT=3000
     ```
+5. Execute as migrações do banco de dados:
+    ```bash
+    npx sequelize-cli db:migrate
+    ```
 
-5. Inicie o servidor:
+6. Inicie o servidor:
     ```bash
     node src/app.js
     ```
@@ -41,10 +45,12 @@
 ## Estrutura do Projeto
 
 - `src/`: Diretório principal do código fonte.
-  - `config/`: Configurações do projeto.
-  - `controllers/`: Controladores da aplicação.
-  - `migrations/`: Migrações do banco de dados.
-  - `models/`: Modelos do banco de dados.
-  - `seeders/`: Seeders do banco de dados.
-  - `routes/`: Definições das rotas da aplicação.
-  - `app.js`: Arquivo principal da aplicação.
+    - `config/`: Configurações do projeto.
+        - `config.json`: Configurações do banco de dados.
+    - `controllers/`: Controladores da aplicação.
+    - `middlewares/`: Middlewares da aplicação.
+    - `migrations/`: Migrações do banco de dados.
+    - `models/`: Modelos do banco de dados.
+    - `seeders/`: Seeders do banco de dados.
+    - `routes/`: Definições das rotas da aplicação.
+    - `app.js`: Arquivo principal da aplicação.
