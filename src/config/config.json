@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "root",
-    "password": "password",
+    "password": "",
     "database": "segue_me",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "password",
+    "password": "",
     "database": "segue_me_test",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "password",
+    "password": "",
     "database": "segue_me_production",
     "host": "localhost",
     "dialect": "mysql"
