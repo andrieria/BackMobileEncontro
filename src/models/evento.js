@@ -7,8 +7,17 @@ module.exports = (sequelize, DataTypes) => {
         administrador_id: {
             type: DataTypes.INTEGER,
             references: { model: 'Administrador', key: 'id' }
-        }
+        },
+        created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
+        updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     }, {
         tableName: 'evento'
     });
+
+    Evento.associate = function(models) {
+        Evento.hasMany(models.Inscricao, { foreignKey: 'evento_id' });
+        Evento.belongsTo(models.Administrador, { foreignKey: 'administrador_id' });
+    }
+
+    return Evento;
 }

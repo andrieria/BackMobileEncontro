@@ -14,8 +14,15 @@ module.exports = (sequelize, DataTypes) => {
         cep: DataTypes.STRING(8),
         sexo: DataTypes.ENUM('M', 'F', 'Outro'),
         nivel_escolaridade: DataTypes.STRING,
-        createdAt:
+        created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
+        updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     }, {
         tableName: 'usuario'
     });
+
+    Usuario.associate = function(models) {
+        Usuario.hasMany(models.Inscricao, { foreignKey: 'usuario_id' });
+    }
+
+    return Usuario;
 }
