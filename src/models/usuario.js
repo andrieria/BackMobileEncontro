@@ -14,5 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         cep: DataTypes.STRING(8),
         sexo: DataTypes.ENUM('M', 'F', 'Outro'),
         nivel_escolaridade: DataTypes.STRING,
+        createdAt:
+    }, {
+        tableName: 'usuario'
     });
 }
