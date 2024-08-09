@@ -1,12 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
     const Administrador = sequelize.define('Administrador', {
-        id: { type: DataTypes.INTEGER, primarykey: true, autoIncrement: true },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         email: { type: DataTypes.STRING, allowNull: false, unique: true },
         senha: { type: DataTypes.STRING, allowNull: false },
         created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
         updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     }, {
-        tableName: 'administrador'
+        tableName: 'administrador',
+        timestamps: true,
+        underscored: true
     });
 
     Administrador.associate = function(models) {
