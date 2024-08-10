@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define('Usuario', {
-        id: { type: DataTypes.INTEGER, primarykey: true, autoIncrement: true },
+        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         email: { type: DataTypes.STRING, allowNull: false, unique: true },
         senha: { type: DataTypes.STRING, allowNull: false },
         nome_completo: { type: DataTypes.STRING, allowNull: false },

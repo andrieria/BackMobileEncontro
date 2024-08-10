@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "password",
+    "password": "",
     "database": "segue_me",
     "host": "localhost",
     "dialect": "mysql"
