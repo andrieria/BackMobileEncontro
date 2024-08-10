@@ -8,7 +8,8 @@ const routes = require('./routes');
 // Configuração do Express
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', routes);
+
+app.use('/', routes);
 
 // Conectar ao banco de dados
 const sequelize = new Sequelize({

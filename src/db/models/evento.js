@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
         administrador_id: {
             type: DataTypes.INTEGER,
             references: {
-                model: 'Administrador',
+                model: 'administrador',
                 key: 'id'
             }
         },
-        created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
-        updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
+        created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+        updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
     }, {
         tableName: 'evento',
         timestamps: false
