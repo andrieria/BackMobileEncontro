@@ -6,13 +6,14 @@ module.exports = (sequelize, DataTypes) => {
         created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
         updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     }, {
-        tableName: 'administrador'
+        tableName: 'administrador',
+        timestamps: false
     });
 
-    Administrador.associate = function(models) {
+    Administrador.associate = function (models) {
         Administrador.hasMany(models.Evento, { foreignKey: 'administrador_id' });
         Administrador.hasMany(models.Inscricao, { foreignKey: 'administrador_id' });
-    }
+    };
 
     return Administrador;
-}
+};

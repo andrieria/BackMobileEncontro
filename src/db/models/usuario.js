@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
         senha: { type: DataTypes.STRING, allowNull: false },
         nome_completo: { type: DataTypes.STRING, allowNull: false },
         cpf: { type: DataTypes.STRING(11), allowNull: false, unique: true },
-        data_nascimento: { type: DataTypes.STRING, allowNull: false },
-        telefone: DataTypes.STRING,
+        data_nascimento: { type: DataTypes.DATE, allowNull: false },
+        telefone: DataTypes.STRING(15),
         rua: DataTypes.STRING,
         bairro: DataTypes.STRING,
         cidade: DataTypes.STRING,
@@ -17,12 +17,13 @@ module.exports = (sequelize, DataTypes) => {
         created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
         updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     }, {
-        tableName: 'usuario'
+        tableName: 'usuario',
+        timestamps: false
     });
 
-    Usuario.associate = function(models) {
+    Usuario.associate = function (models) {
         Usuario.hasMany(models.Inscricao, { foreignKey: 'usuario_id' });
-    }
+    };
 
     return Usuario;
-}
+};

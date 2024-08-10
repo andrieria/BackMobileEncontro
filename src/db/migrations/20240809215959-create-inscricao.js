@@ -38,4 +38,3 @@ module.exports = {
     await queryInterface.dropTable('inscricao');
   }
 };
-

@@ -6,18 +6,22 @@ module.exports = (sequelize, DataTypes) => {
         data_fim: { type: DataTypes.DATE, allowNull: false },
         administrador_id: {
             type: DataTypes.INTEGER,
-            references: { model: 'Administrador', key: 'id' }
+            references: {
+                model: 'Administrador',
+                key: 'id'
+            }
         },
         created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
         updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     }, {
-        tableName: 'evento'
+        tableName: 'evento',
+        timestamps: false
     });
 
-    Evento.associate = function(models) {
+    Evento.associate = function (models) {
         Evento.hasMany(models.Inscricao, { foreignKey: 'evento_id' });
         Evento.belongsTo(models.Administrador, { foreignKey: 'administrador_id' });
-    }
+    };
 
     return Evento;
-}
+};

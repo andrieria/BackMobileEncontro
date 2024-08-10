@@ -2,83 +2,27 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('usuario', {
-      id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false
-      },
-      nome_completo: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      cpf: {
-        type: Sequelize.STRING(11),
-        allowNull: false,
-        unique: true
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
-      },
-      senha: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      data_nascimento: {
-        type: Sequelize.DATEONLY,
-        allowNull: false
-      },
-      nivel_escolaridade: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      telefone: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      rua: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      bairro: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      cidade: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      estado: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      cep: {
-        type: Sequelize.STRING(8),
-        allowNull: false
-      },
-      sexo: {
-        type: Sequelize.ENUM('M', 'F', 'O'),
-        allowNull: false
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.fn('NOW')
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.fn('NOW')
-      }
+      id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+      email: { type: Sequelize.STRING, allowNull: false, unique: true },
+      senha: { type: Sequelize.STRING, allowNull: false },
+      nome_completo: { type: Sequelize.STRING, allowNull: false },
+      cpf: { type: Sequelize.STRING(11), allowNull: false, unique: true },
+      data_nascimento: { type: Sequelize.DATE, allowNull: false },
+      telefone: Sequelize.STRING(15),
+      rua: Sequelize.STRING,
+      bairro: Sequelize.STRING,
+      cidade: Sequelize.STRING,
+      estado: Sequelize.STRING(2),
+      cep: Sequelize.STRING(8),
+      sexo: Sequelize.ENUM('M', 'F', 'Outro'),
+      nivel_escolaridade: Sequelize.STRING,
+      created_at: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP') },
+      updated_at: { type: Sequelize.DATE, allowNull: false, defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
     });
   },
-
-  async down (queryInterface, Sequelize) {
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('usuario');
   }
 };
-
