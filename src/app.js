@@ -3,7 +3,7 @@ const express = require('express');
 const { Sequelize } = require('sequelize');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const adminRoutes = require('./routes/router');
+const routes = require('./routes/router');
 // Configuração do Express
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 // Usando as rotas de administrador
-app.use('/api', adminRoutes); // Prefixando as rotas com /api
+app.use('/api', routes); // Prefixando as rotas com /api
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
