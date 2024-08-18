@@ -8,10 +8,21 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             references: { model: 'Administrador', key: 'id' }
         },
-        created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP') },
-        updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP') }
+        created_at: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+          },
+          updated_at: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+          }
     }, {
-        tableName: 'evento'
+        tableName: 'evento',
+        timestamps: true, 
+        updatedAt: 'updated_at',
+        createdAt: 'created_at'
     });
 
     Evento.associate = function(models) {

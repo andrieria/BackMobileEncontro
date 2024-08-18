@@ -4,10 +4,14 @@ const { Sequelize } = require('sequelize');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const routes = require('./routes/router');
+const bodyParser = require('body-parser');
+const cors = require('cors');
 // Configuração do Express
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors()); // Habilita CORS
+app.use(bodyParser.json()); // Permite parsing de JSON
 // Conectar ao banco de dados
 const sequelize = new Sequelize({
   dialect: 'mysql',
@@ -25,8 +29,13 @@ sequelize.authenticate()
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
-// Usando as rotas de administrador
-app.use('/api', routes); // Prefixando as rotas com /api
+
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from Node.js!' });
+});
+
+app.use('/api', routes);
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+module.exports = app;

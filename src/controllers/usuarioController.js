@@ -5,58 +5,33 @@ const jwt = require('jsonwebtoken');
 module.exports = {
   async cadastrar(req, res) {
     try {
-        const {
-            email, senha, confirmarSenha, nome_completo, cpf, data_nascimento,
-            telefone, rua, bairro, cidade, estado, cep, sexo, nivel_escolaridade
-        } = req.body;
+      const { email, senha, confirmarSenha } = req.body;
 
-        // Verificar se todos os campos obrigatórios estão presentes
-        if (!email || !senha || !confirmarSenha || !nome_completo || !cpf || !data_nascimento) {
-            return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
-        }
+      if (!email || !senha || !confirmarSenha) {
+          return res.status(400).json({ error: 'Todos os campos obrigatórios devem ser preenchidos.' });
+      }
 
-        // Verificar se as senhas coincidem
-        if (senha !== confirmarSenha) {
-            return res.status(400).json({ error: 'As senhas não coincidem.' });
-        }
+      if (senha !== confirmarSenha) {
+          return res.status(400).json({ error: 'As senhas não coincidem.' });
+      }
 
-        // Verificar se o e-mail já está cadastrado
-        const usuarioExistente = await Usuario.findOne({ where: { email } });
-        if (usuarioExistente) {
-            return res.status(400).json({ error: 'E-mail já cadastrado.' });
-        }
+      const usuarioExistente = await Usuario.findOne({ where: { email } });
+      if (usuarioExistente) {
+          return res.status(400).json({ error: 'E-mail já cadastrado.' });
+      }
 
-        // Verificar se o CPF já está cadastrado
-        const cpfExistente = await Usuario.findOne({ where: { cpf } });
-        if (cpfExistente) {
-            return res.status(400).json({ error: 'CPF já cadastrado.' });
-        }
+      const hashedSenha = await bcrypt.hash(senha, 10);
 
-        // Criptografar a senha
-        const hashedSenha = await bcrypt.hash(senha, 10);
+      const novoUsuario = await Usuario.create({
+          email,
+          senha: hashedSenha,
+      });
 
-        // Criar novo usuário com todos os campos
-        const novoUsuario = await Usuario.create({
-            email,
-            senha: hashedSenha,
-            nome_completo,
-            cpf,
-            data_nascimento,
-            telefone,
-            rua,
-            bairro,
-            cidade,
-            estado,
-            cep,
-            sexo,
-            nivel_escolaridade
-        });
-
-        return res.status(201).json({ message: 'Usuário cadastrado com sucesso!', usuario: novoUsuario });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: 'Erro ao cadastrar usuário.', detalhes: error.message });
-    }
+      return res.status(201).json({ message: 'Usuário cadastrado com sucesso!', usuario: novoUsuario });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Erro ao cadastrar usuário.', detalhes: error.message });
+  }
 },
 
 
