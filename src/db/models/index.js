@@ -1,14 +1,12 @@
 'use strict';
 
-require('dotenv').config();
-
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/../config/config.js')[env];
+const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
 let sequelize;
@@ -29,7 +27,9 @@ fs
     );
   })
   .forEach(file => {
+    console.log('Carregando model:', file);  // Adicione este log para depuração
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    console.log('Model carregado:', model);  // Adicione este log para depuração
     db[model.name] = model;
   });
 

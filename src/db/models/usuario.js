@@ -13,12 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         estado: { type: DataTypes.STRING(2), allowNull: true },
         cep: { type: DataTypes.STRING(8), allowNull: true },
         sexo: { type: DataTypes.ENUM('M', 'F', 'Outro'), allowNull: true },
-        nivel_escolaridade: { type: DataTypes.STRING, allowNull: true },
-        created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
-        updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
+        nivel_escolaridade: { type: DataTypes.STRING, allowNull: true }
     }, {
         tableName: 'usuario',
-        timestamps: false
+        timestamps: true
     });
 
     Usuario.associate = function (models) {
