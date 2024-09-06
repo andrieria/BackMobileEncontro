@@ -27,7 +27,9 @@ fs
     );
   })
   .forEach(file => {
+    console.log('Carregando model:', file);  // Adicione este log para depuração
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    console.log('Model carregado:', model);  // Adicione este log para depuração
     db[model.name] = model;
   });
 
