@@ -12,7 +12,7 @@ module.exports = {
         usuario_id,
         evento_id,
         status,
-        administrador_id
+        administrador_id,
       });
 
       return res.status(201).json({ message: 'Inscrição criada com sucesso!', inscricao: novaInscricao });
@@ -28,8 +28,8 @@ module.exports = {
         include: [
           { model: Usuario, as: 'usuario' },
           { model: Evento, as: 'evento' },
-          { model: Administrador, as: 'administrador' }
-        ]
+          { model: Administrador, as: 'administrador' },
+        ],
       });
       return res.status(200).json(inscricoes);
     } catch (error) {
@@ -51,7 +51,7 @@ module.exports = {
         usuario_id,
         evento_id,
         status,
-        administrador_id
+        administrador_id,
       });
 
       return res.status(200).json({ message: 'Inscrição atualizada com sucesso!', inscricao });
@@ -73,5 +73,41 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({ error: 'Erro ao deletar inscrição.', detalhes: error.message });
     }
-  }
+  },
+
+  // Novo método para atualizar o status da inscrição
+  async atualizarStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body; // Novo status a ser definido
+
+      const inscricao = await Inscricao.findByPk(id);
+      if (!inscricao) {
+        return res.status(404).json({ error: 'Inscrição não encontrada.' });
+      }
+
+      await inscricao.update({ status }); // Atualiza somente o status
+      return res.status(200).json({ message: 'Status atualizado com sucesso!', inscricao });
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro ao atualizar status da inscrição.', detalhes: error.message });
+    }
+  },
+
+  // Novo método para obter o status da inscrição de um usuário específico
+  async obterStatusPorUsuario(req, res) {
+    try {
+      const { usuario_id } = req.params;
+
+      const inscricao = await Inscricao.findOne({ where: { usuario_id } });
+
+      if (!inscricao) {
+        return res.status(404).json({ message: 'Inscrição não encontrada para este usuário.' });
+      }
+
+      return res.status(200).json({ status: inscricao.status });
+    } catch (error) {
+      console.error('Erro ao obter status da inscrição:', error);
+      return res.status(500).json({ error: 'Erro ao obter status da inscrição.', detalhes: error.message });
+    }
+  },
 };

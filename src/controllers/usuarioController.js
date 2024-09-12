@@ -23,9 +23,10 @@ module.exports = {
       const hashedSenha = await bcrypt.hash(senha, 10);
 
       const novoUsuario = await Usuario.create({
-          email,
-          senha: hashedSenha,
-      });
+        email,
+        senha: hashedSenha,
+        cpf: null // Assegura que o campo CPF será null
+    });
 
       return res.status(201).json({ message: 'Usuário cadastrado com sucesso!', usuario: novoUsuario });
   } catch (error) {
@@ -50,7 +51,7 @@ module.exports = {
       }
 
       const token = jwt.sign({ id: usuario.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      return res.status(200).json({ token });
+      return res.status(200).json({ token, userId: usuario.id });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Erro ao realizar login.' });
@@ -68,24 +69,69 @@ module.exports = {
     }
   },  
 
-  async atualizar(req, res) {
+  async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const { email, senha } = req.body;
-
       const usuario = await Usuario.findByPk(id);
       if (!usuario) {
         return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
+      return res.status(200).json(usuario);
+    } catch (error) {
+      console.error('Erro ao buscar usuário por ID:', error);
+      return res.status(500).json({ error: 'Erro ao buscar usuário.' });
+    }
+  },
 
+  async atualizar(req, res) {
+    try {
+      console.log('Requisição recebida:', req.params, req.body);
+      const { id } = req.params;
+      const {
+        nome_completo,
+        cpf,
+        data_nascimento,
+        telefone,
+        rua,
+        bairro,
+        cidade,
+        estado,
+        cep,
+        sexo,
+        nivel_escolaridade,
+        email,
+        senha
+      } = req.body;
+  
+      const usuario = await Usuario.findByPk(id);
+      if (!usuario) {
+        return res.status(404).json({ error: 'Usuário não encontrado.' });
+      }
+      console.log('Usuário encontrado:', usuario);
       const hashedSenha = senha ? await bcrypt.hash(senha, 10) : usuario.senha;
-      await usuario.update({ email, senha: hashedSenha });
-
+      await usuario.update({
+        nome_completo,
+        cpf,
+        data_nascimento,
+        telefone,
+        rua,
+        bairro,
+        cidade,
+        estado,
+        cep,
+        sexo,
+        nivel_escolaridade,
+        email,
+        senha: hashedSenha
+      });
+      console.log('Usuário atualizado com sucesso');
       return res.status(200).json({ message: 'Usuário atualizado com sucesso!', usuario });
     } catch (error) {
+      console.error('Erro ao atualizar usuário:', error);
       return res.status(500).json({ error: 'Erro ao atualizar usuário.' });
     }
   },
+  
 
   async deletar(req, res) {
     try {
