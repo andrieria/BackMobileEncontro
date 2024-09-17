@@ -21,10 +21,14 @@ router.delete('/administradores/:id', AdministradorController.delete);
 
 router.post('/inscricoes/criar', inscricaoController.criar);
 router.get('/inscricoes/listar', inscricaoController.listar);
+router.get('/inscricoes/pendentes', inscricaoController.pendentes);
+router.get('/inscricoes/pendentes/:id', inscricaoController.pendentesporid);
+router.get('/inscricoes/aprovadas', inscricaoController.listar);
 router.put('/inscricoes/atualizar/:id', inscricaoController.atualizar);
-router.put('/inscricoes/atualizar/:id/status', inscricaoController.atualizarStatus);
+router.put('/inscricoes/atualizar/:id/status', inscricaoController.atualizarStatusInscricao);
 router.get('/inscricoes/status/usuario/:usuario_id', inscricaoController.obterStatusPorUsuario);
 router.delete('/inscricoes/deletar/:id', inscricaoController.deletar);
+router.get('/inscricoes/usuario/:id', inscricaoController.pendentesPorUsuarioId);
 
 router.post('/evento/criar', eventoController.criar);
 router.get('/evento/listar', eventoController.listar);

@@ -37,6 +37,62 @@ module.exports = {
     }
   },
 
+  async pendentes(req, res) {
+    try {
+      const inscricoes = await Inscricao.findAll({
+        where: { status: 'Em Análise' },
+        include: [
+          { model: Usuario, as: 'usuario' },
+          { model: Evento, as: 'evento' },
+        ],
+      });
+      return res.status(200).json(inscricoes);
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro ao listar inscrições.', detalhes: error.message });
+    }
+  },  
+
+  async pendentesporid(req, res) {
+    try {
+      const { id } = req.params;
+      const inscricao = await Inscricao.findOne({
+        where: { id, status: 'Em Análise' },
+        include: [
+          { model: Usuario, as: 'usuario' },
+          { model: Evento, as: 'evento' },
+        ],
+      });
+      if (!inscricao) {
+        return res.status(404).json({ error: 'Inscrição não encontrada.' });
+      }
+      return res.status(200).json(inscricao);
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro ao listar inscrição.', detalhes: error.message });
+    }
+  },  
+
+  async pendentesPorUsuarioId(req, res) {
+    try {
+      const { id } = req.params;
+  
+      // Buscar inscrições por ID de usuário e incluir os dados do usuário e evento (se houver)
+      const inscricoes = await Inscricao.findAll({
+        where: { usuario_id: id },
+        include: [
+          { model: Usuario, as: 'usuario', attributes: ['id', 'nome_completo', 'email', 'cpf'] }
+        ],
+      });
+  
+      if (!inscricoes || inscricoes.length === 0) {
+        return res.status(404).json({ error: 'Inscrição não encontrada.' });
+      }
+  
+      return res.status(200).json(inscricoes);
+    } catch (error) {
+      return res.status(500).json({ error: 'Erro ao listar inscrições.', detalhes: error.message });
+    }
+  },  
+
   async atualizar(req, res) {
     try {
       const { id } = req.params;
@@ -76,22 +132,31 @@ module.exports = {
   },
 
   // Novo método para atualizar o status da inscrição
-  async atualizarStatus(req, res) {
+// Atualiza o status da inscrição de um usuário
+  async atualizarStatusInscricao(req, res) {
     try {
-      const { id } = req.params;
-      const { status } = req.body; // Novo status a ser definido
+      const { id } = req.params; // ID da inscrição
+      const { status } = req.body; // Novo status (Deferido ou Indeferido)
 
-      const inscricao = await Inscricao.findByPk(id);
-      if (!inscricao) {
-        return res.status(404).json({ error: 'Inscrição não encontrada.' });
+      if (!['Deferido', 'Indeferido'].includes(status)) {
+        return res.status(400).json({ error: 'Status inválido' });
       }
 
-      await inscricao.update({ status }); // Atualiza somente o status
-      return res.status(200).json({ message: 'Status atualizado com sucesso!', inscricao });
-    } catch (error) {
-      return res.status(500).json({ error: 'Erro ao atualizar status da inscrição.', detalhes: error.message });
+      const inscricao = await Inscricao.findByPk(id);
+
+    if (!inscricao) {
+      return res.status(404).json({ error: 'Inscrição não encontrada' });
     }
-  },
+
+    inscricao.status = status;
+    await inscricao.save();
+
+    return res.status(200).json({ message: 'Status atualizado com sucesso', inscricao });
+  } catch (error) {
+    return res.status(500).json({ error: 'Erro ao atualizar status', detalhes: error.message });
+  }
+},
+
 
   // Novo método para obter o status da inscrição de um usuário específico
   async obterStatusPorUsuario(req, res) {

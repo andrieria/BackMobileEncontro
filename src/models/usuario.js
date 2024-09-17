@@ -1,3 +1,5 @@
+const inscricao = require("./inscricao");
+
 module.exports = (sequelize, DataTypes) => {
     const Usuario = sequelize.define('Usuario', {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -13,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         estado: { type: DataTypes.STRING(2), allowNull: true },
         cep: { type: DataTypes.STRING(8), allowNull: true },
         sexo: { type: DataTypes.ENUM('M', 'F', 'Outro'), allowNull: true },
-        nivel_escolaridade: { type: DataTypes.STRING, allowNull: true }
+        nivel_escolaridade: { type: DataTypes.STRING, allowNull: true },
     }, {
         tableName: 'usuario',
         timestamps: true
     });
-
+    
     Usuario.associate = function (models) {
-        Usuario.hasMany(models.Inscricao, { foreignKey: 'usuario_id' });
+        Usuario.hasMany(models.Inscricao, { foreignKey: 'usuario_id', as: 'inscricoes' });
     };
 
     return Usuario;

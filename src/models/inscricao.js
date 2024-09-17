@@ -1,3 +1,5 @@
+const usuario = require("./usuario");
+
 module.exports = (sequelize, DataTypes) => {
     const Inscricao = sequelize.define('Inscricao', {
         id: {
@@ -34,5 +36,25 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: true,
         underscored: true
     });
+    
+    Inscricao.associate = function (models) {
+        Inscricao.belongsTo(models.Usuario, {
+            foreignKey: 'usuario_id',
+            as: 'usuario'
+        });
+    
+        // Relacionamento com o modelo Evento
+        Inscricao.belongsTo(models.Evento, {
+          foreignKey: 'evento_id',
+          as: 'evento'
+        });
+    
+        // Relacionamento com o modelo Administrador
+        Inscricao.belongsTo(models.Administrador, {
+          foreignKey: 'administrador_id',
+          as: 'administrador'
+        });
+      };
+
     return Inscricao;
 };

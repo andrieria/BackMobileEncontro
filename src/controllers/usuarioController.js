@@ -1,4 +1,5 @@
 const { Usuario } = require('../models');
+const { Inscricao } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -27,8 +28,17 @@ module.exports = {
         senha: hashedSenha,
         cpf: null // Assegura que o campo CPF será null
     });
+    // Cria uma inscrição para o novo usuário
+    const novaInscricao = await Inscricao.create({
+      usuario_id: novoUsuario.id,
+      status: 'Em Análise'
+    });
 
-      return res.status(201).json({ message: 'Usuário cadastrado com sucesso!', usuario: novoUsuario });
+    return res.status(201).json({
+      message: 'Usuário e inscrição criados com sucesso!',
+      usuario: novoUsuario,
+      inscricao: novaInscricao
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Erro ao cadastrar usuário.', detalhes: error.message });
@@ -72,16 +82,25 @@ module.exports = {
   async buscarPorId(req, res) {
     try {
       const { id } = req.params;
-      const usuario = await Usuario.findByPk(id);
+  
+      // Inclui as inscrições relacionadas ao usuário
+      const usuario = await Usuario.findByPk(id, {
+        include: [{
+          model: Inscricao,
+          as: 'inscricoes' // Alias consistente com o definido no modelo Usuario
+        }]
+      });
+  
       if (!usuario) {
         return res.status(404).json({ error: 'Usuário não encontrado.' });
       }
+  
       return res.status(200).json(usuario);
     } catch (error) {
       console.error('Erro ao buscar usuário por ID:', error);
       return res.status(500).json({ error: 'Erro ao buscar usuário.' });
     }
-  },
+  },  
 
   async atualizar(req, res) {
     try {
@@ -146,5 +165,5 @@ module.exports = {
     } catch (error) {
       return res.status(500).json({ error: 'Erro ao deletar usuário.' });
     }
-  }
+  },
 }
